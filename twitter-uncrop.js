@@ -17,6 +17,7 @@
 	}
 
 	// .css-1dbjc4n.r-18bvks7.r-1867qdf.r-1phboty.r-rs99b7.r-156q2ks.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg
+	// document.querySelectorAll("div[class='css-1dbjc4n r-156q2ks']")
 
 	setInterval(function() {
 		const articles = document.querySelectorAll("article:not([data-uncropped])");
