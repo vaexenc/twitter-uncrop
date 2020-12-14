@@ -23,10 +23,10 @@
 			const aAndImageURLs = [];
 
 			for (let image of images) {
-				// const a = image.closest("a");
+				const a = image.closest("a");
 				aAndImageURLs.push(
 					{
-						// a: a,
+						a: a,
 						imageUrl: image.src.replace(/name=\w+/, "name=orig")
 					}
 				);
@@ -38,7 +38,10 @@
 				let img = document.createElement("img");
 				img.src = aAndImageURL.imageUrl;
 				img.style = "width: 100%; margin-top: 5px; margin-bottom: 3px";
-				imageContainer.appendChild(img);
+				aAndImageURL.a.classList = null;
+				aAndImageURL.a.textContent = "";
+				imageContainer.appendChild(aAndImageURL.a);
+				aAndImageURL.a.appendChild(img);
 			}
 
 			article.setAttribute("data-uncropped", "");
