@@ -17,7 +17,7 @@
 			const imageContainer = getMainImageContainerFromArticle(article);
 			if (!imageContainer) continue;
 
-			const images = imageContainer.querySelectorAll("img[alt=Image]");
+			const images = imageContainer.querySelectorAll("img");
 			if (images.length == 0) continue; // if they haven't been added yet
 
 			const aAndImageURLs = [];
