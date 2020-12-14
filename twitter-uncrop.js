@@ -15,31 +15,29 @@
 
 		for (let article of articles) {
 			const imageContainer = getMainImageContainerFromArticle(article);
-
-			if (!imageContainer) {
-				continue;
-			}
+			if (!imageContainer) continue;
 
 			const images = imageContainer.querySelectorAll("img[alt=Image]");
+			if (images.length == 0) continue; // if they haven't been added yet
+
 			const aAndImageURLs = [];
 
 			for (let image of images) {
-				const a = image.closest("a");
+				// const a = image.closest("a");
 				aAndImageURLs.push(
 					{
-						a: a,
-						imageUrl: image.src
+						// a: a,
+						imageUrl: image.src.replace(/name=\w+/, "name=orig")
 					}
 				);
 			}
 
 			imageContainer.textContent = "";
-			
+
 			for (let aAndImageURL of aAndImageURLs) {
-				console.log("aaaaaa", aAndImageURLs[0].a);
 				let img = document.createElement("img");
 				img.src = aAndImageURL.imageUrl;
-				img.style = "width: 100%; margin-bottom: 10px";
+				img.style = "width: 100%; margin-top: 5px; margin-bottom: 3px";
 				imageContainer.appendChild(img);
 			}
 
