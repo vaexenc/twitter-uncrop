@@ -3,8 +3,7 @@
 
 	function getMainImageContainerFromArticle(article) {
 		const query = article.querySelector(".css-1dbjc4n.r-18bvks7.r-1867qdf.r-1phboty.r-rs99b7.r-156q2ks.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg");
-		if (query)
-			return query.parentElement; // todo https://github.com/jshint/jshint/issues/3448
+		if (query) return query.parentElement; // todo https://github.com/jshint/jshint/issues/3448
 	}
 
 	// function getRetweetContainerFromArticle(article) {
@@ -45,5 +44,5 @@
 
 			article.setAttribute("data-uncropped", "");
 		}
-	}, 400);
+	}, 600);
 })();
