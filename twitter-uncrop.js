@@ -34,10 +34,11 @@
 			}
 
 			imageContainer.textContent = "";
-
-			for (let x of aAndImageURLs) {
+			
+			for (let aAndImageURL of aAndImageURLs) {
+				console.log("aaaaaa", aAndImageURLs[0].a);
 				let img = document.createElement("img");
-				img.src = x.imageUrl;
+				img.src = aAndImageURL.imageUrl;
 				img.style = "width: 100%; margin-bottom: 10px";
 				imageContainer.appendChild(img);
 			}
