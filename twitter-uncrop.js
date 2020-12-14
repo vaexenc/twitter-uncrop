@@ -1,3 +1,15 @@
+// ==UserScript==
+// @name        Twitter Image Uncropper
+// @version     1.0.0
+// @author      vaexenc
+// @description 
+// @homepage    https://github.com/vaexenc/twitter-uncrop
+// @icon64      
+// @include     https://twitter.com/*
+// @include     https://mobile.twitter.com/*
+// @grant       none
+// ==/UserScript==
+
 (function() {
 	"use strict";
 
