@@ -7,7 +7,7 @@
 			return query.parentElement; // todo https://github.com/jshint/jshint/issues/3448
 	}
 
-	// function getRetweetElementFromArticle(article) {
+	// function getRetweetContainerFromArticle(article) {
 	// 	return article.querySelector("div[class='css-1dbjc4n r-156q2ks']");
 	// }
 
@@ -16,36 +16,32 @@
 
 		for (let article of articles) {
 			const imageContainer = getMainImageContainerFromArticle(article);
+
 			if (!imageContainer) {
 				continue;
 			}
 
-			// const images = imageContainer.querySelectorAll("img[alt=Image]");
+			const images = imageContainer.querySelectorAll("img[alt=Image]");
+			const aAndImageURLs = [];
 
-			// let aAndImageURLs = [];
+			for (let image of images) {
+				const a = image.closest("a");
+				aAndImageURLs.push(
+					{
+						a: a,
+						imageUrl: image.src
+					}
+				);
+			}
 
-			// for (let image of images) {
-			// 	const a = image.closest("a");
-			// 	if (!a) {
-			// 		continue;
-			// 	}
+			imageContainer.textContent = "";
 
-			// 	aAndImageURLs.push(
-			// 		{
-			// 			a: a,
-			// 			imageUrl: image.src
-			// 		}
-			// 	);
-			// }
-
-			imageContainer.textContent = "TEST TEST TEST TEST TEST TEST TEST TEST";
-
-			// for (let x of aAndImageURLs) {
-			// 	let img = document.createElement("img");
-			// 	img.src = x.imageUrl;
-			// 	img.style = "width: 100%;"
-			// 	contentArea.appendChild(img);
-			// }
+			for (let x of aAndImageURLs) {
+				let img = document.createElement("img");
+				img.src = x.imageUrl;
+				img.style = "width: 100%; margin-bottom: 10px";
+				imageContainer.appendChild(img);
+			}
 
 			article.setAttribute("data-uncropped", "");
 		}
