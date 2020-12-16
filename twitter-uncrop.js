@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Twitter Image Uncropper
-// @version     1.0.0
+// @version     0.1.0
 // @author      vaexenc
 // @description 
 // @homepage    https://github.com/vaexenc/twitter-uncrop
