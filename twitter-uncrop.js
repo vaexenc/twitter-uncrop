@@ -2,8 +2,9 @@
 // @name        Twitter Image Uncropper
 // @version     0.1.0
 // @author      vaexenc
-// @description 
-// @homepage    https://github.com/vaexenc/twitter-uncrop
+// @description Uncrops images in tweets.
+// @homepage    https://github.com/vaexenc
+// @source      https://github.com/vaexenc/twitter-uncrop
 // @icon64      
 // @include     https://twitter.com/*
 // @include     https://mobile.twitter.com/*
