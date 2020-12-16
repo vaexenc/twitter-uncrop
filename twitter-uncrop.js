@@ -14,9 +14,46 @@
 (function() {
 	"use strict";
 
+	const APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR = ".css-1dbjc4n.r-18bvks7.r-1867qdf.r-1phboty.r-rs99b7.r-156q2ks.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg";
+	const IMAGE_STYLE = "width: 100%; margin-top: 5px; margin-bottom: 3px";
+	const UNCROPPED_ATTRIBUTE_NAME = "data-uncropper-uncropped";
+
+	function getMainImageContainerFromApproximateElement(approximateElement) {
+		return approximateElement.parentEntity;
+	}
+
 	function getMainImageContainerFromArticle(article) {
-		const query = article.querySelector(".css-1dbjc4n.r-18bvks7.r-1867qdf.r-1phboty.r-rs99b7.r-156q2ks.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg");
-		return query?.parentElement;
+		const approximateElement = article.querySelector(APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR);
+		if (!approximateElement) {return;}
+		return getMainImageContainerFromApproximateElement(approximateElement);
+	}
+
+	function getMainImageContainerFromImage(image) {
+		const approximateElement = image.closest(APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR);
+		if (!approximateElement) {return;}
+		return getMainImageContainerFromApproximateElement(approximateElement);
+	}
+
+	function getAAndImageURLFromImage(image) {
+		const a = image.closest("a");
+		const imageURL = image.src.replace(/name=\w+/, "name=orig");
+		return {a: a, imageURL: imageURL};
+	}
+
+	function clearImageContainerContent(imageContainer) {
+		imageContainer.textContent = "";
+	}
+
+	function createImage(imageUrl) {
+		let image = document.createElement("img");
+		image.src = imageUrl;
+		image.style = IMAGE_STYLE;
+		return image;
+	}
+
+	function sanitizeA(a) {
+		a.classList = null;
+		a.textContent = "";
 	}
 
 	// function getRetweetContainerFromArticle(article) {
@@ -39,42 +76,4 @@
 	// const observer = new MutationObserver(callback);
 	// observer.observe(target, config);
 	// return;
-
-	setInterval(function() {
-		const articles = document.querySelectorAll("article:not([data-uncropped])");
-
-		for (let article of articles) {
-			const imageContainer = getMainImageContainerFromArticle(article);
-			if (!imageContainer) continue;
-
-			const images = imageContainer.querySelectorAll("img");
-			if (images.length == 0) continue; // if they haven't been added yet
-
-			const aAndImageURLs = [];
-
-			for (let image of images) {
-				const a = image.closest("a");
-				aAndImageURLs.push(
-					{
-						a: a,
-						imageUrl: image.src.replace(/name=\w+/, "name=orig")
-					}
-				);
-			}
-
-			imageContainer.textContent = "";
-
-			for (let aAndImageURL of aAndImageURLs) {
-				let img = document.createElement("img");
-				img.src = aAndImageURL.imageUrl;
-				img.style = "width: 100%; margin-top: 5px; margin-bottom: 3px";
-				aAndImageURL.a.classList = null;
-				aAndImageURL.a.textContent = "";
-				imageContainer.appendChild(aAndImageURL.a);
-				aAndImageURL.a.appendChild(img);
-			}
-
-			article.setAttribute("data-uncropped", "");
-		}
-	}, 600);
 })();
