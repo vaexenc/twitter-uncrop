@@ -5,7 +5,7 @@
 // @description Uncrops images in tweets.
 // @homepage    https://github.com/vaexenc
 // @source      https://github.com/vaexenc/twitter-uncrop
-// @icon64      
+// @icon64
 // @include     https://twitter.com/*
 // @include     https://mobile.twitter.com/*
 // @grant       none
@@ -22,6 +22,23 @@
 	// function getRetweetContainerFromArticle(article) {
 	// 	return article.querySelector("div[class='css-1dbjc4n r-156q2ks']");
 	// }
+
+	// const target = document.querySelector("html");
+	// // const target = document.querySelector("html");
+	// const config = {childList: true, subtree: true};
+	// const callback = function(mutationsList, observer) {
+	// 	for (const mutation of mutationsList) {
+	// 		if (!mutation.addedNodes) {return;}
+	// 		for (const addedNode of mutation.addedNodes) {
+	// 			if (addedNode.tagName != "IMG" || !addedNode.src.includes("&name=")) {continue;}
+	// 			addedNode.closest("article").style.setProperty("opacity", 0.1);
+	// 			console.log("            ", addedNode);
+	// 		}
+	// 	}
+	// };
+	// const observer = new MutationObserver(callback);
+	// observer.observe(target, config);
+	// return;
 
 	setInterval(function() {
 		const articles = document.querySelectorAll("article:not([data-uncropped])");
