@@ -18,20 +18,12 @@
 	const IMAGE_STYLE = "width: 100%; margin-top: 5px; margin-bottom: 3px";
 	const ATTRIBUTE_NAME_MAIN_IMAGE_CONTAINER = "data-uncropper-main-image-container";
 
-	function getMainImageContainerFromApproximateElement(approximateElement) {
-		return approximateElement.parentElement;
-	}
-
 	function getMainImageContainerFromArticle(article) {
-		const approximateElement = article.querySelector(APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR);
-		if (!approximateElement) {return;}
-		return getMainImageContainerFromApproximateElement(approximateElement);
+		return article.querySelector(APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR)?.parentElement;
 	}
 
 	function getMainImageContainerFromImage(image) {
-		const approximateElement = image.closest(APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR);
-		if (!approximateElement) {return;}
-		return getMainImageContainerFromApproximateElement(approximateElement);
+		return image.closest(APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR).parentElement;
 	}
 
 	function sanitizeImageA(a) {
@@ -39,10 +31,8 @@
 		a.textContent = "";
 	}
 
-	function getAAndImageURLFromImage(image) {
-		const a = image.closest("a");
-		const imageURL = image.src.replace(/name=\w+/, "name=orig");
-		return {a: a, imageURL: imageURL};
+	function getHighQualityImageURLfromImage(image) {
+		return image.src.replace(/name=\w+/, "name=orig");
 	}
 
 	function clearImageContainerContent(imageContainer) {
@@ -64,19 +54,19 @@
 	const observerConfig = {childList: true, subtree: true};
 
 	const observerCallback = function(mutationsList) {
-		// console.log("       booperones        START");
 		for (const mutation of mutationsList) {
 			if (!mutation.addedNodes) {return;}
 			for (const addedNode of mutation.addedNodes) {
 				if (addedNode.tagName !== "IMG" || !addedNode.src.includes("&name=")) {continue;}
 				const image = addedNode;
-				const aAndImageURL = getAAndImageURLFromImage(image);
+				const newImage = createImage(getHighQualityImageURLfromImage(image));
+				const imageA = image.closest("a");
 				const mainImageContainer = getMainImageContainerFromImage(image);
-				mainImageContainer.append(createImage(aAndImageURL.imageURL));
-				console.log("       booperones            ", mainImageContainer, image);
+				sanitizeImageA(imageA);
+				mainImageContainer.append(imageA);
+				imageA.append(newImage);
 			}
 		}
-		// console.log("       booperones        END");
 	};
 
 	const observer = new MutationObserver(observerCallback);
