@@ -49,14 +49,16 @@
 			for (const addedNode of mutation.addedNodes) {
 				if (addedNode.tagName !== "IMG" || !addedNode.src.includes("&name=")) continue;
 				const image = addedNode;
+				const newImage = createImage(getHighQualityImageURLfromImage(image));
 				const imageA = image.closest("a");
-				const approximateMainImageContainer = image.closest(APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR);
+				const approximateMainImageContainer = imageA.closest(APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR);
 				const mainImageContainer = getMainImageContainerFromApproximateMainImageContainer(approximateMainImageContainer);
-				approximateMainImageContainer.style.setProperty("display", "none");
-				approximateMainImageContainer.hidden = "true"; // ?
+				setTimeout(function() { // images don't get added if it's already hidden?
+					approximateMainImageContainer.style.setProperty("display", "none");
+					approximateMainImageContainer.hidden = "true"; // ?
+				}, 0);
 				sanitizeImageA(imageA);
 				mainImageContainer.append(imageA);
-				const newImage = createImage(getHighQualityImageURLfromImage(image));
 				imageA.append(newImage);
 			}
 		}
