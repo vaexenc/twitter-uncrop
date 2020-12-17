@@ -45,9 +45,9 @@
 
 	const observerCallback = function(mutationsList) {
 		for (const mutation of mutationsList) {
-			if (!mutation.addedNodes) {return;}
+			if (!mutation.addedNodes) return;
 			for (const addedNode of mutation.addedNodes) {
-				if (addedNode.tagName !== "IMG" || !addedNode.src.includes("&name=")) {continue;}
+				if (addedNode.tagName !== "IMG" || !addedNode.src.includes("&name=")) continue;
 				const image = addedNode;
 				const imageA = image.closest("a");
 				const approximateMainImageContainer = image.closest(APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR);
