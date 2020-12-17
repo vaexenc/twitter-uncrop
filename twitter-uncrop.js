@@ -34,6 +34,11 @@
 		return getMainImageContainerFromApproximateElement(approximateElement);
 	}
 
+	function sanitizeImageA(a) {
+		a.classList = null;
+		a.textContent = "";
+	}
+
 	function getAAndImageURLFromImage(image) {
 		const a = image.closest("a");
 		const imageURL = image.src.replace(/name=\w+/, "name=orig");
@@ -51,11 +56,6 @@
 		return image;
 	}
 
-	function sanitizeA(a) {
-		a.classList = null;
-		a.textContent = "";
-	}
-
 	// function getRetweetContainerFromArticle(article) {
 	// 	return article.querySelector("div[class='css-1dbjc4n r-156q2ks']");
 	// }
@@ -64,18 +64,19 @@
 	const observerConfig = {childList: true, subtree: true};
 
 	const observerCallback = function(mutationsList) {
-		console.log("       booperones        START");
+		// console.log("       booperones        START");
 		for (const mutation of mutationsList) {
 			if (!mutation.addedNodes) {return;}
 			for (const addedNode of mutation.addedNodes) {
-				if (addedNode.tagName != "IMG" || !addedNode.src.includes("&name=")) {continue;}
-				// addedNode is an image now
-				const mainImageContainer = getMainImageContainerFromImage(addedNode);
-				mainImageContainer.style.setProperty("opacity", 0.1);
-				console.log("       booperones            ", mainImageContainer, addedNode);
+				if (addedNode.tagName !== "IMG" || !addedNode.src.includes("&name=")) {continue;}
+				const image = addedNode;
+				const aAndImageURL = getAAndImageURLFromImage(image);
+				const mainImageContainer = getMainImageContainerFromImage(image);
+				mainImageContainer.append(createImage(aAndImageURL.imageURL));
+				console.log("       booperones            ", mainImageContainer, image);
 			}
 		}
-		console.log("       booperones        END");
+		// console.log("       booperones        END");
 	};
 
 	const observer = new MutationObserver(observerCallback);
