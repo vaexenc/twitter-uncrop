@@ -16,10 +16,10 @@
 
 	const APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR = ".css-1dbjc4n.r-18bvks7.r-1867qdf.r-1phboty.r-rs99b7.r-156q2ks.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg";
 	const IMAGE_STYLE = "width: 100%; margin-top: 5px; margin-bottom: 3px";
-	const UNCROPPED_ATTRIBUTE_NAME = "data-uncropper-uncropped";
+	const ATTRIBUTE_NAME_MAIN_IMAGE_CONTAINER = "data-uncropper-main-image-container";
 
 	function getMainImageContainerFromApproximateElement(approximateElement) {
-		return approximateElement.parentEntity;
+		return approximateElement.parentElement;
 	}
 
 	function getMainImageContainerFromArticle(article) {
@@ -45,7 +45,7 @@
 	}
 
 	function createImage(imageUrl) {
-		let image = document.createElement("img");
+		const image = document.createElement("img");
 		image.src = imageUrl;
 		image.style = IMAGE_STYLE;
 		return image;
@@ -60,20 +60,24 @@
 	// 	return article.querySelector("div[class='css-1dbjc4n r-156q2ks']");
 	// }
 
-	// const target = document.querySelector("html");
-	// // const target = document.querySelector("html");
-	// const config = {childList: true, subtree: true};
-	// const callback = function(mutationsList, observer) {
-	// 	for (const mutation of mutationsList) {
-	// 		if (!mutation.addedNodes) {return;}
-	// 		for (const addedNode of mutation.addedNodes) {
-	// 			if (addedNode.tagName != "IMG" || !addedNode.src.includes("&name=")) {continue;}
-	// 			addedNode.closest("article").style.setProperty("opacity", 0.1);
-	// 			console.log("            ", addedNode);
-	// 		}
-	// 	}
-	// };
-	// const observer = new MutationObserver(callback);
-	// observer.observe(target, config);
-	// return;
+	const observerTarget = document.querySelector("html");
+	const observerConfig = {childList: true, subtree: true};
+
+	const observerCallback = function(mutationsList) {
+		console.log("       booperones        START");
+		for (const mutation of mutationsList) {
+			if (!mutation.addedNodes) {return;}
+			for (const addedNode of mutation.addedNodes) {
+				if (addedNode.tagName != "IMG" || !addedNode.src.includes("&name=")) {continue;}
+				// addedNode is an image now
+				const mainImageContainer = getMainImageContainerFromImage(addedNode);
+				mainImageContainer.style.setProperty("opacity", 0.1);
+				console.log("       booperones            ", mainImageContainer, addedNode);
+			}
+		}
+		console.log("       booperones        END");
+	};
+
+	const observer = new MutationObserver(observerCallback);
+	observer.observe(observerTarget, observerConfig);
 })();
