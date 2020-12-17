@@ -16,14 +16,9 @@
 
 	const APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR = ".css-1dbjc4n.r-18bvks7.r-1867qdf.r-1phboty.r-rs99b7.r-156q2ks.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg";
 	const IMAGE_STYLE = "width: 100%; margin-top: 5px; margin-bottom: 3px";
-	const ATTRIBUTE_NAME_MAIN_IMAGE_CONTAINER = "data-uncropper-main-image-container";
 
-	function getMainImageContainerFromArticle(article) {
-		return article.querySelector(APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR)?.parentElement;
-	}
-
-	function getMainImageContainerFromImage(image) {
-		return image.closest(APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR).parentElement;
+	function getMainImageContainerFromApproximateMainImageContainer(imageContainer) {
+		return imageContainer.parentElement;
 	}
 
 	function sanitizeImageA(a) {
@@ -33,10 +28,6 @@
 
 	function getHighQualityImageURLfromImage(image) {
 		return image.src.replace(/name=\w+/, "name=orig");
-	}
-
-	function clearImageContainerContent(imageContainer) {
-		imageContainer.textContent = "";
 	}
 
 	function createImage(imageUrl) {
@@ -59,11 +50,14 @@
 			for (const addedNode of mutation.addedNodes) {
 				if (addedNode.tagName !== "IMG" || !addedNode.src.includes("&name=")) {continue;}
 				const image = addedNode;
-				const newImage = createImage(getHighQualityImageURLfromImage(image));
 				const imageA = image.closest("a");
-				const mainImageContainer = getMainImageContainerFromImage(image);
+				const approximateMainImageContainer = image.closest(APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR);
+				const mainImageContainer = getMainImageContainerFromApproximateMainImageContainer(approximateMainImageContainer);
+				approximateMainImageContainer.style.setProperty("display", "none");
+				approximateMainImageContainer.hidden = "true"; // ?
 				sanitizeImageA(imageA);
 				mainImageContainer.append(imageA);
+				const newImage = createImage(getHighQualityImageURLfromImage(image));
 				imageA.append(newImage);
 			}
 		}
