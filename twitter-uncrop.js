@@ -16,6 +16,7 @@
 	const APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR = ".css-1dbjc4n.r-18bvks7.r-1867qdf.r-1phboty.r-rs99b7.r-156q2ks.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg";
 	const IMAGE_STYLE = "width: 100%; margin-top: 5px; margin-bottom: 3px";
 	const APPROXIMATE_MAIN_IMAGE_CONTAINER_STYLE = "opacity: 0; height: 0px; border-width: 0px; margin-top: 0px;";
+	const APPROXIMATE_MAIN_IMAGE_CONTAINER_CUSTOM_ATTRIBUTE = "data-uncropper-marked";
 
 	function getMainImageContainerFromApproximateMainImageContainer(imageContainer) {
 		return imageContainer.parentElement;
@@ -37,6 +38,10 @@
 		return image;
 	}
 
+	function getOrderNumberFromImage(image) {
+		return parseInt(image.closest("a").href.match(/\d$/)[0]);
+	}
+
 	// function getRetweetContainerFromArticle(article) {
 	// 	return article.querySelector("div[class='css-1dbjc4n r-156q2ks']");
 	// }
@@ -49,20 +54,28 @@
 			if (!mutation.addedNodes) return;
 			for (const addedNode of mutation.addedNodes) {
 				if (addedNode.tagName !== "IMG" || !addedNode.src.includes("&name=")) continue;
-				const image = addedNode;
-				const newImage = createImage(getHighQualityImageURLfromImage(image));
-				const imageA = image.closest("a");
-				const approximateMainImageContainer = imageA.closest(APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR);
-				const mainImageContainer = getMainImageContainerFromApproximateMainImageContainer(approximateMainImageContainer);
-				setTimeout(function() {
-					// approximateMainImageContainer.style.setProperty("display", "none"); // images don't get added if it's already hidden?
-					// approximateMainImageContainer.hidden = "true"; // unnecessary?
-					approximateMainImageContainer.remove();
-				}, 100);
+				const approximateMainImageContainer = addedNode.closest(APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR);
+				if (approximateMainImageContainer.hasAttribute(APPROXIMATE_MAIN_IMAGE_CONTAINER_CUSTOM_ATTRIBUTE)) continue;
 				approximateMainImageContainer.style.cssText += APPROXIMATE_MAIN_IMAGE_CONTAINER_STYLE;
-				sanitizeImageA(imageA);
-				mainImageContainer.append(imageA);
-				imageA.append(newImage);
+				approximateMainImageContainer.setAttribute(APPROXIMATE_MAIN_IMAGE_CONTAINER_CUSTOM_ATTRIBUTE, "");
+				setTimeout(function() {
+					const mainImageContainer = getMainImageContainerFromApproximateMainImageContainer(approximateMainImageContainer);
+					const images = Array.from(approximateMainImageContainer.querySelectorAll("img"));
+					images.sort(function(image1, image2) {
+						const image1OrderNumber = getOrderNumberFromImage(image1);
+						const image2OrderNumber = getOrderNumberFromImage(image2);
+						if (image1OrderNumber < image2OrderNumber) return -1;
+						return 1;
+					});
+					for (const image of images) {
+						const newImage = createImage(getHighQualityImageURLfromImage(image));
+						const imageA = image.closest("a");
+						sanitizeImageA(imageA);
+						mainImageContainer.append(imageA);
+						imageA.append(newImage);
+					}
+					approximateMainImageContainer.remove();
+				}, 0);
 			}
 		}
 	};
