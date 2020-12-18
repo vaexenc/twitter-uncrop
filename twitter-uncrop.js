@@ -55,7 +55,7 @@
 			for (const addedNode of mutation.addedNodes) {
 				if (addedNode.tagName !== "IMG" || !addedNode.src.includes("&name=")) continue;
 				const approximateMainImageContainer = addedNode.closest(APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR);
-				if (approximateMainImageContainer.hasAttribute(APPROXIMATE_MAIN_IMAGE_CONTAINER_CUSTOM_ATTRIBUTE)) continue;
+				if (!approximateMainImageContainer || approximateMainImageContainer.hasAttribute(APPROXIMATE_MAIN_IMAGE_CONTAINER_CUSTOM_ATTRIBUTE)) continue;
 				approximateMainImageContainer.style.cssText += APPROXIMATE_MAIN_IMAGE_CONTAINER_STYLE;
 				approximateMainImageContainer.setAttribute(APPROXIMATE_MAIN_IMAGE_CONTAINER_CUSTOM_ATTRIBUTE, "");
 				setTimeout(function() {
