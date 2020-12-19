@@ -13,7 +13,11 @@
 (function() {
 	"use strict";
 
+	// const OPTION_RETWEETS = true;
+	
 	const APPROXIMATE_MAIN_IMAGE_CONTAINER_SELECTOR = ".css-1dbjc4n.r-18bvks7.r-1867qdf.r-1phboty.r-rs99b7.r-156q2ks.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg";
+	// const RETWEET_SELECTOR = "div[class='css-1dbjc4n r-156q2ks']";
+	// const RETWEET_CONTENT_SELECTOR = "div[class='css-1dbjc4n r-18u37iz']"
 	const IMAGE_STYLE = "width: 100%; margin-top: 5px; margin-bottom: 3px";
 	const APPROXIMATE_MAIN_IMAGE_CONTAINER_STYLE = "opacity: 0; height: 0px; border-width: 0px; margin-top: 0px;";
 	const APPROXIMATE_MAIN_IMAGE_CONTAINER_CUSTOM_ATTRIBUTE = "data-uncropper-marked";
