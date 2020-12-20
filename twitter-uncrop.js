@@ -18,7 +18,7 @@
 	const IMAGE_URL_NAME = "orig";
 	const MAIN_IMAGE_CONTAINER_SOURCE_SELECTOR = ".css-1dbjc4n.r-18bvks7.r-1867qdf.r-1phboty.r-rs99b7.r-156q2ks.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg";
 	const RETWEET_DIRECT_IMAGE_CONTAINER_SOURCE_SELECTOR = "div[class='css-1dbjc4n r-1g94qm0']";
-	// const RETWEET_TIMELINE_IMAGE_CONTAINER_SOURCE_SELECTOR = "css-1dbjc4n r-k200y r-42olwf r-1867qdf r-1phboty r-dta0w2 r-1n0xq6e r-1g94qm0 r-zg41ew r-1udh08x";
+	const RETWEET_TIMELINE_IMAGE_CONTAINER_SOURCE_SELECTOR = ".css-1dbjc4n.r-k200y.r-42olwf.r-1867qdf.r-1phboty.r-dta0w2.r-1n0xq6e.r-1g94qm0.r-zg41ew.r-1udh08x";
 	const RETWEET_IMAGE_CONTAINER_TARGET_SELECTOR = ".css-1dbjc4n.r-18bvks7.r-1867qdf.r-rs99b7.r-1loqt21.r-dap0kf.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg";
 	const IMAGE_STYLE = "width: 100%; margin-top: 5px; margin-bottom: 3px";
 	const RETWEET_IMAGE_STYLE = "width: 100%; margin-top: 5px;";
@@ -85,7 +85,7 @@
 	}
 
 	function uncropRetweetImages(imageNode) {
-		const retweetImageContainerSource = imageNode.closest(RETWEET_DIRECT_IMAGE_CONTAINER_SOURCE_SELECTOR);
+		const retweetImageContainerSource = imageNode.closest(RETWEET_DIRECT_IMAGE_CONTAINER_SOURCE_SELECTOR) || imageNode.closest(RETWEET_TIMELINE_IMAGE_CONTAINER_SOURCE_SELECTOR);
 		if (!retweetImageContainerSource || retweetImageContainerSource.hasAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE)) return;
 		retweetImageContainerSource.style.cssText += IMAGE_CONTAINER_SOURCE_STYLE;
 		retweetImageContainerSource.setAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE, "");
