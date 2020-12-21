@@ -21,7 +21,6 @@
 	const RETWEET_TIMELINE_IMAGE_CONTAINER_SOURCE_SELECTOR = ".css-1dbjc4n.r-k200y.r-42olwf.r-1867qdf.r-1phboty.r-dta0w2.r-1n0xq6e.r-1g94qm0.r-zg41ew.r-1udh08x";
 	const RETWEET_IMAGE_CONTAINER_TARGET_SELECTOR = ".css-1dbjc4n.r-18bvks7.r-1867qdf.r-rs99b7.r-1loqt21.r-dap0kf.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg";
 	const IMAGE_STYLE = "width: 100%; margin-top: 5px; margin-bottom: 3px";
-	const RETWEET_IMAGE_STYLE = "width: 100%; margin-top: 5px;";
 	const IMAGE_CONTAINER_SOURCE_STYLE = "opacity: 0; height: 0px; border-width: 0px; margin: 0px 0px 0px 0px;";
 	const IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE = "data-uncropper-marked";
 
