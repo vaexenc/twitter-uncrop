@@ -4,7 +4,7 @@
 // @description Uncrops images in tweets.
 // @include     https://twitter.com/*
 // @include     https://mobile.twitter.com/*
-// @icon
+// @icon        https://i.imgur.com/aZxZzdw.png
 // @author      vaexenc
 // @namespace   https://github.com/vaexenc
 // @grant       none
