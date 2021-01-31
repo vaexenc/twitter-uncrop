@@ -13,23 +13,23 @@
 (function() {
 	"use strict";
 
-	const RETWEETS_ENABLED = true;
+	const IS_RETWEETS_ENABLED = true;
 
 	const IMAGE_URL_NAME = "orig";
-	const MAIN_IMAGE_CONTAINER_SOURCE_SELECTOR = ".css-1dbjc4n.r-18bvks7.r-1867qdf.r-1phboty.r-rs99b7.r-156q2ks.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg";
-	const RETWEET_DIRECT_IMAGE_CONTAINER_SOURCE_SELECTOR = "div[class='css-1dbjc4n r-1g94qm0']";
-	const RETWEET_TIMELINE_IMAGE_CONTAINER_SOURCE_SELECTOR = ".css-1dbjc4n.r-k200y.r-42olwf.r-1867qdf.r-1phboty.r-dta0w2.r-1n0xq6e.r-1g94qm0.r-zg41ew.r-1udh08x";
-	const RETWEET_IMAGE_CONTAINER_TARGET_SELECTOR = ".css-1dbjc4n.r-18bvks7.r-1867qdf.r-rs99b7.r-1loqt21.r-dap0kf.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg";
-	const IMAGE_STYLE = "width: 100%; margin-top: 5px; margin-bottom: 3px";
-	const IMAGE_CONTAINER_SOURCE_STYLE = "opacity: 0; height: 0px; border-width: 0px; margin: 0px 0px 0px 0px;";
+	const SELECTOR_MAIN_IMAGE_CONTAINER_STARTINGPOINT = ".css-1dbjc4n.r-18bvks7.r-1867qdf.r-1phboty.r-rs99b7.r-156q2ks.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg";
+	const SELECTOR_RETWEET_DIRECT_IMAGE_CONTAINER_STARTINGPOINT = "div[class='css-1dbjc4n r-1g94qm0']";
+	const SELECTOR_RETWEET_TIMELINE_IMAGE_CONTAINER_STARTINGPOINT = ".css-1dbjc4n.r-k200y.r-42olwf.r-1867qdf.r-1phboty.r-dta0w2.r-1n0xq6e.r-1g94qm0.r-zg41ew.r-1udh08x";
+	const SELECTOR_RETWEET_IMAGE_CONTAINER_TARGET = ".css-1dbjc4n.r-18bvks7.r-1867qdf.r-rs99b7.r-1loqt21.r-dap0kf.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg";
+	const STYLE_NEWLY_INSERTED_IMAGE = "width: 100%; margin-top: 5px; margin-bottom: 3px";
+	const STYLE_HIDDEN_IMAGE_CONTAINER_STARTINGPOINT = "opacity: 0; height: 0px; border-width: 0px; margin: 0px 0px 0px 0px;";
 	const IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE = "data-uncropper-marked";
 
-	function getMainImageContainerTargetFromMainImageContainerSource(imageContainer) {
+	function getMainImageContainerTargetFromMainImageContainerStartingPoint(imageContainer) {
 		return imageContainer.parentElement;
 	}
 
-	function getRetweetImageContainerTargetFromRetweetImageContainerSource(imageContainer) {
-		return imageContainer.closest(RETWEET_IMAGE_CONTAINER_TARGET_SELECTOR);
+	function getRetweetImageContainerTargetFromRetweetImageContainerStartingPoint(imageContainer) {
+		return imageContainer.closest(SELECTOR_RETWEET_IMAGE_CONTAINER_TARGET);
 	}
 
 	function sanitizeImageA(a) {
@@ -41,7 +41,7 @@
 		return image.src.replace(/name=\w+/, "name=" + IMAGE_URL_NAME);
 	}
 
-	function createImage(imageUrl, style) {
+	function createImageElement(imageUrl, style) {
 		const image = document.createElement("img");
 		image.src = imageUrl;
 		image.style = style;
@@ -60,40 +60,40 @@
 	}
 
 	function uncropMainImages(imageNode) {
-		const mainImageContainerSource = imageNode.closest(MAIN_IMAGE_CONTAINER_SOURCE_SELECTOR);
-		if (!mainImageContainerSource || mainImageContainerSource.hasAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE)) return;
-		mainImageContainerSource.setAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE, "");
+		const mainImageContainerStartingPoint = imageNode.closest(SELECTOR_MAIN_IMAGE_CONTAINER_STARTINGPOINT);
+		if (!mainImageContainerStartingPoint || mainImageContainerStartingPoint.hasAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE)) return;
+		mainImageContainerStartingPoint.setAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE, "");
 		setTimeout(function() {
-			const mainImageContainerTarget = getMainImageContainerTargetFromMainImageContainerSource(mainImageContainerSource);
-			const images = Array.from(mainImageContainerSource.querySelectorAll("img"));
+			const mainImageContainerTarget = getMainImageContainerTargetFromMainImageContainerStartingPoint(mainImageContainerStartingPoint);
+			const images = Array.from(mainImageContainerStartingPoint.querySelectorAll("img"));
 			images.sort(imageArraySortFunction);
 			for (const image of images) {
-				const newImage = createImage(getHighQualityImageURLfromImage(image), IMAGE_STYLE);
+				const newImage = createImageElement(getHighQualityImageURLfromImage(image), STYLE_NEWLY_INSERTED_IMAGE);
 				const imageA = image.closest("a");
 				sanitizeImageA(imageA);
 				mainImageContainerTarget.append(imageA);
 				imageA.append(newImage);
 			}
-			mainImageContainerSource.remove();
+			mainImageContainerStartingPoint.remove();
 		}, 0);
 	}
 
 	function uncropRetweetImages(imageNode) {
-		const retweetImageContainerSource = imageNode.closest(RETWEET_DIRECT_IMAGE_CONTAINER_SOURCE_SELECTOR) || imageNode.closest(RETWEET_TIMELINE_IMAGE_CONTAINER_SOURCE_SELECTOR);
-		if (!retweetImageContainerSource || retweetImageContainerSource.hasAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE)) return;
-		retweetImageContainerSource.setAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE, "");
+		const retweetImageContainerStartingPoint = imageNode.closest(SELECTOR_RETWEET_DIRECT_IMAGE_CONTAINER_STARTINGPOINT) || imageNode.closest(SELECTOR_RETWEET_TIMELINE_IMAGE_CONTAINER_STARTINGPOINT);
+		if (!retweetImageContainerStartingPoint || retweetImageContainerStartingPoint.hasAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE)) return;
+		retweetImageContainerStartingPoint.setAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE, "");
 		setTimeout(function() {
-			const retweetImageContainerTarget = getRetweetImageContainerTargetFromRetweetImageContainerSource(retweetImageContainerSource);
-			const images = Array.from(retweetImageContainerSource.querySelectorAll("img"));
+			const retweetImageContainerTarget = getRetweetImageContainerTargetFromRetweetImageContainerStartingPoint(retweetImageContainerStartingPoint);
+			const images = Array.from(retweetImageContainerStartingPoint.querySelectorAll("img"));
 			images.sort(imageArraySortFunction);
 			for (const image of images) {
-				const newImage = createImage(getHighQualityImageURLfromImage(image), IMAGE_STYLE);
+				const newImage = createImageElement(getHighQualityImageURLfromImage(image), STYLE_NEWLY_INSERTED_IMAGE);
 				const imageA = image.closest("a");
 				sanitizeImageA(imageA);
 				retweetImageContainerTarget.append(imageA);
 				imageA.append(newImage);
 			}
-			retweetImageContainerSource.remove();
+			retweetImageContainerStartingPoint.remove();
 		}, 0);
 	}
 
@@ -107,17 +107,17 @@
 				if (
 					addedNode.tagName === "DIV"
 					&& (
-						addedNode.matches(MAIN_IMAGE_CONTAINER_SOURCE_SELECTOR)
-						|| addedNode.matches(RETWEET_DIRECT_IMAGE_CONTAINER_SOURCE_SELECTOR)
-						|| addedNode.matches(RETWEET_TIMELINE_IMAGE_CONTAINER_SOURCE_SELECTOR)
+						addedNode.matches(SELECTOR_MAIN_IMAGE_CONTAINER_STARTINGPOINT)
+						|| addedNode.matches(SELECTOR_RETWEET_DIRECT_IMAGE_CONTAINER_STARTINGPOINT)
+						|| addedNode.matches(SELECTOR_RETWEET_TIMELINE_IMAGE_CONTAINER_STARTINGPOINT)
 					)
 					&& addedNode.closest("article")
 				) {
-					addedNode.style.cssText += IMAGE_CONTAINER_SOURCE_STYLE;
+					addedNode.style.cssText += STYLE_HIDDEN_IMAGE_CONTAINER_STARTINGPOINT;
 				}
 				else if (addedNode.tagName === "IMG" && addedNode.src.includes("&name=")) {
 					uncropMainImages(addedNode);
-					if (RETWEETS_ENABLED) uncropRetweetImages(addedNode);
+					if (IS_RETWEETS_ENABLED) uncropRetweetImages(addedNode);
 				}
 			}
 		}
