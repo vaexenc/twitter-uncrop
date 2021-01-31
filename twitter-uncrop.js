@@ -61,6 +61,7 @@
 
 	function uncropImages(imageContainerStartingPoint, getImageContainerFunction) {
 		if (!imageContainerStartingPoint || imageContainerStartingPoint.hasAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE)) return;
+		imageContainerStartingPoint.style.cssText += STYLE_HIDDEN_IMAGE_CONTAINER_STARTINGPOINT;
 		imageContainerStartingPoint.setAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE, "");
 		setTimeout(function() {
 			const imageContainerTarget = getImageContainerFunction(imageContainerStartingPoint);
@@ -94,18 +95,7 @@
 		for (const mutation of mutationsList) {
 			if (!mutation.addedNodes) return;
 			for (const addedNode of mutation.addedNodes) {
-				if (
-					addedNode.tagName === "DIV"
-					&& (
-						addedNode.matches(SELECTOR_MAIN_IMAGE_CONTAINER_STARTINGPOINT)
-						|| addedNode.matches(SELECTOR_RETWEET_DIRECT_IMAGE_CONTAINER_STARTINGPOINT)
-						|| addedNode.matches(SELECTOR_RETWEET_TIMELINE_IMAGE_CONTAINER_STARTINGPOINT)
-					)
-					&& addedNode.closest("article")
-				) {
-					addedNode.style.cssText += STYLE_HIDDEN_IMAGE_CONTAINER_STARTINGPOINT;
-				}
-				else if (addedNode.tagName === "IMG" && addedNode.src.includes("&name=")) {
+				if (addedNode.tagName === "IMG" && addedNode.src.includes("&name=")) {
 					uncropMainImages(addedNode);
 					if (IS_RETWEETS_ENABLED) uncropRetweetImages(addedNode);
 				}
