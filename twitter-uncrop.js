@@ -59,42 +59,32 @@
 		return 1;
 	}
 
-	function uncropMainImages(imageNode) {
-		const mainImageContainerStartingPoint = imageNode.closest(SELECTOR_MAIN_IMAGE_CONTAINER_STARTINGPOINT);
-		if (!mainImageContainerStartingPoint || mainImageContainerStartingPoint.hasAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE)) return;
-		mainImageContainerStartingPoint.setAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE, "");
+	function uncropImages(imageNode, imageContainerStartingPoint, getImageContainerFunction) {
+		if (!imageContainerStartingPoint || imageContainerStartingPoint.hasAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE)) return;
+		imageContainerStartingPoint.setAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE, "");
 		setTimeout(function() {
-			const mainImageContainerTarget = getMainImageContainerTargetFromMainImageContainerStartingPoint(mainImageContainerStartingPoint);
-			const images = Array.from(mainImageContainerStartingPoint.querySelectorAll("img"));
+			const imageContainerTarget = getImageContainerFunction(imageContainerStartingPoint);
+			const images = Array.from(imageContainerStartingPoint.querySelectorAll("img"));
 			images.sort(imageArraySortFunction);
 			for (const image of images) {
 				const newImage = createImageElement(getHighQualityImageURLfromImage(image), STYLE_NEWLY_INSERTED_IMAGE);
 				const imageA = image.closest("a");
 				sanitizeImageA(imageA);
-				mainImageContainerTarget.append(imageA);
+				imageContainerTarget.append(imageA);
 				imageA.append(newImage);
 			}
-			mainImageContainerStartingPoint.remove();
+			imageContainerStartingPoint.remove();
 		}, 0);
+	}
+
+	function uncropMainImages(imageNode) {
+		const mainImageContainerStartingPoint = imageNode.closest(SELECTOR_MAIN_IMAGE_CONTAINER_STARTINGPOINT);
+		uncropImages(imageNode, mainImageContainerStartingPoint, getMainImageContainerTargetFromMainImageContainerStartingPoint);
 	}
 
 	function uncropRetweetImages(imageNode) {
 		const retweetImageContainerStartingPoint = imageNode.closest(SELECTOR_RETWEET_DIRECT_IMAGE_CONTAINER_STARTINGPOINT) || imageNode.closest(SELECTOR_RETWEET_TIMELINE_IMAGE_CONTAINER_STARTINGPOINT);
-		if (!retweetImageContainerStartingPoint || retweetImageContainerStartingPoint.hasAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE)) return;
-		retweetImageContainerStartingPoint.setAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE, "");
-		setTimeout(function() {
-			const retweetImageContainerTarget = getRetweetImageContainerTargetFromRetweetImageContainerStartingPoint(retweetImageContainerStartingPoint);
-			const images = Array.from(retweetImageContainerStartingPoint.querySelectorAll("img"));
-			images.sort(imageArraySortFunction);
-			for (const image of images) {
-				const newImage = createImageElement(getHighQualityImageURLfromImage(image), STYLE_NEWLY_INSERTED_IMAGE);
-				const imageA = image.closest("a");
-				sanitizeImageA(imageA);
-				retweetImageContainerTarget.append(imageA);
-				imageA.append(newImage);
-			}
-			retweetImageContainerStartingPoint.remove();
-		}, 0);
+		uncropImages(imageNode, retweetImageContainerStartingPoint, getRetweetImageContainerTargetFromRetweetImageContainerStartingPoint);
 	}
 
 	const observerTarget = document.querySelector("html");
