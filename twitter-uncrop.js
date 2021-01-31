@@ -59,7 +59,7 @@
 		return 1;
 	}
 
-	function uncropImages(imageNode, imageContainerStartingPoint, getImageContainerFunction) {
+	function uncropImages(imageContainerStartingPoint, getImageContainerFunction) {
 		if (!imageContainerStartingPoint || imageContainerStartingPoint.hasAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE)) return;
 		imageContainerStartingPoint.setAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE, "");
 		setTimeout(function() {
@@ -79,12 +79,12 @@
 
 	function uncropMainImages(imageNode) {
 		const mainImageContainerStartingPoint = imageNode.closest(SELECTOR_MAIN_IMAGE_CONTAINER_STARTINGPOINT);
-		uncropImages(imageNode, mainImageContainerStartingPoint, getMainImageContainerTargetFromMainImageContainerStartingPoint);
+		uncropImages(mainImageContainerStartingPoint, getMainImageContainerTargetFromMainImageContainerStartingPoint);
 	}
 
 	function uncropRetweetImages(imageNode) {
 		const retweetImageContainerStartingPoint = imageNode.closest(SELECTOR_RETWEET_DIRECT_IMAGE_CONTAINER_STARTINGPOINT) || imageNode.closest(SELECTOR_RETWEET_TIMELINE_IMAGE_CONTAINER_STARTINGPOINT);
-		uncropImages(imageNode, retweetImageContainerStartingPoint, getRetweetImageContainerTargetFromRetweetImageContainerStartingPoint);
+		uncropImages(retweetImageContainerStartingPoint, getRetweetImageContainerTargetFromRetweetImageContainerStartingPoint);
 	}
 
 	const observerTarget = document.querySelector("html");
