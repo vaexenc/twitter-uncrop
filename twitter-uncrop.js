@@ -52,10 +52,6 @@
 		return parseInt(image.closest("a").href.match(/\d$/)[0]);
 	}
 
-	// function getRetweetContainerFromArticle(article) {
-	// 	return article.querySelector("div[class='css-1dbjc4n r-156q2ks']");
-	// }
-
 	function imageArraySortFunction(image1, image2) {
 		const image1OrderNumber = getOrderNumberFromImage(image1);
 		const image2OrderNumber = getOrderNumberFromImage(image2);
