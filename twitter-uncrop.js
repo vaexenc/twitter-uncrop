@@ -66,7 +66,6 @@
 	function uncropMainImages(imageNode) {
 		const mainImageContainerSource = imageNode.closest(MAIN_IMAGE_CONTAINER_SOURCE_SELECTOR);
 		if (!mainImageContainerSource || mainImageContainerSource.hasAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE)) return;
-		mainImageContainerSource.style.cssText += IMAGE_CONTAINER_SOURCE_STYLE;
 		mainImageContainerSource.setAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE, "");
 		setTimeout(function() {
 			const mainImageContainerTarget = getMainImageContainerTargetFromMainImageContainerSource(mainImageContainerSource);
@@ -86,7 +85,6 @@
 	function uncropRetweetImages(imageNode) {
 		const retweetImageContainerSource = imageNode.closest(RETWEET_DIRECT_IMAGE_CONTAINER_SOURCE_SELECTOR) || imageNode.closest(RETWEET_TIMELINE_IMAGE_CONTAINER_SOURCE_SELECTOR);
 		if (!retweetImageContainerSource || retweetImageContainerSource.hasAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE)) return;
-		retweetImageContainerSource.style.cssText += IMAGE_CONTAINER_SOURCE_STYLE;
 		retweetImageContainerSource.setAttribute(IMAGE_CONTAINER_CUSTOM_MARK_ATTRIBUTE, "");
 		setTimeout(function() {
 			const retweetImageContainerTarget = getRetweetImageContainerTargetFromRetweetImageContainerSource(retweetImageContainerSource);
@@ -110,9 +108,21 @@
 		for (const mutation of mutationsList) {
 			if (!mutation.addedNodes) return;
 			for (const addedNode of mutation.addedNodes) {
-				if (addedNode.tagName !== "IMG" || !addedNode.src.includes("&name=")) continue;
-				uncropMainImages(addedNode);
-				if (RETWEETS_ENABLED) uncropRetweetImages(addedNode);
+				if (
+					addedNode.tagName === "DIV"
+					&& (
+						addedNode.matches(MAIN_IMAGE_CONTAINER_SOURCE_SELECTOR)
+						|| addedNode.matches(RETWEET_DIRECT_IMAGE_CONTAINER_SOURCE_SELECTOR)
+						|| addedNode.matches(RETWEET_TIMELINE_IMAGE_CONTAINER_SOURCE_SELECTOR)
+					)
+					&& addedNode.closest("article")
+				) {
+					addedNode.style.cssText += IMAGE_CONTAINER_SOURCE_STYLE;
+				}
+				else if (addedNode.tagName === "IMG" && addedNode.src.includes("&name=")) {
+					uncropMainImages(addedNode);
+					if (RETWEETS_ENABLED) uncropRetweetImages(addedNode);
+				}
 			}
 		}
 	};
