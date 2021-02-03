@@ -88,10 +88,7 @@
 		uncropImages(retweetImageContainerStartingPoint, getRetweetImageContainerTargetFromRetweetImageContainerStartingPoint);
 	}
 
-	const observerTarget = document.querySelector("html");
-	const observerConfig = {childList: true, subtree: true};
-
-	const observerCallback = function(mutationsList) {
+	function observerCallback(mutationsList) {
 		for (const mutation of mutationsList) {
 			if (!mutation.addedNodes) return;
 			for (const addedNode of mutation.addedNodes) {
@@ -101,8 +98,10 @@
 				}
 			}
 		}
-	};
+	}
 
 	const observer = new MutationObserver(observerCallback);
+	const observerTarget = document.querySelector("html");
+	const observerConfig = {childList: true, subtree: true};
 	observer.observe(observerTarget, observerConfig);
 })();
