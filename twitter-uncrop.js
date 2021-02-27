@@ -16,7 +16,7 @@
 	const IS_RETWEETS_ENABLED = true;
 
 	const IMAGE_URL_NAME = "orig";
-	const SELECTOR_MAIN_IMAGE_CONTAINER_STARTINGPOINT = ".css-1dbjc4n.r-1kqtdi0.r-1867qdf.r-1phboty.r-rs99b7.r-156q2ks.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg";
+	const SELECTOR_MAIN_IMAGE_CONTAINER_STARTINGPOINT = ".css-1dbjc4n.r-1kqtdi0.r-1867qdf.r-1phboty.r-rs99b7.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg";
 	const SELECTOR_RETWEET_DIRECT_IMAGE_CONTAINER_STARTINGPOINT = "div[class='css-1dbjc4n r-1g94qm0']";
 	const SELECTOR_RETWEET_TIMELINE_IMAGE_CONTAINER_STARTINGPOINT = ".css-1dbjc4n.r-k200y.r-42olwf.r-1867qdf.r-1phboty.r-dta0w2.r-1n0xq6e.r-1g94qm0.r-zg41ew.r-1udh08x";
 	const SELECTOR_RETWEET_IMAGE_CONTAINER_TARGET = ".css-1dbjc4n.r-1kqtdi0.r-1867qdf.r-rs99b7.r-1loqt21.r-dap0kf.r-1ny4l3l.r-1udh08x.r-o7ynqc.r-6416eg";
